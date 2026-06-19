@@ -30,4 +30,4 @@ dist/
 *.egg-info/
 
 # Jupyter Notebook checkpoints
-.ipynb_checkpoints/
+.ipynb_checkpoints/*.pdf 

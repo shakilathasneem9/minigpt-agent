@@ -7,3 +7,4 @@ pydantic
 SpeechRecognition
 pydub
 soundfile
+grok-sdk
