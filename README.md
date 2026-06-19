@@ -1,0 +1,1 @@
+MiniGPT Agent is an AI-powered assistant built using a tool-augmented LLM architecture. It uses intent classification to route user queries to appropriate tools such as a calculator or web search, and then generates a final response using an LLM.

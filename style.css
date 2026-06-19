@@ -1,0 +1,148 @@
+/* =========================================
+   GLOBAL
+========================================= */
+
+.stApp {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.block-container {
+    max-width: 900px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    padding-top: 2rem !important;
+    padding-bottom: 120px !important;
+}
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+[data-testid="stSidebar"] {
+    background-color: var(--secondary-background-color);
+    border-right: 1px solid rgba(128,128,128,0.15);
+}
+
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3 {
+    background: rgba(128,128,128,0.15);
+    padding: 10px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* =========================================
+   SELECTBOX
+========================================= */
+
+[data-testid="stSelectbox"] {
+    margin-bottom: 12px;
+}
+
+[data-baseweb="select"] > div {
+    background: rgba(128,128,128,0.12) !important;
+    border-radius: 10px !important;
+}
+
+/* =========================================
+   CHAT MESSAGES
+========================================= */
+
+[data-testid="stChatMessage"] {
+    margin-bottom: 16px !important;
+}
+
+/* USER MESSAGE */
+
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+/* ASSISTANT MESSAGE */
+
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
+    display: flex !important;
+    justify-content: flex-start !important;
+}
+
+/* =========================================
+   CHAT INPUT FIXED BOTTOM CENTER
+========================================= */
+
+[data-testid="stChatInput"] {
+    position: fixed !important;
+
+    bottom: 20px !important;
+
+    /* center in main area after sidebar */
+    left: calc(49% + 170px) !important;
+
+    transform: translateX(-50%) !important;
+
+    width: 900px !important;
+    max-width: calc(100vw - 450px) !important;
+
+    z-index: 9999 !important;
+}
+/* Send button */
+
+[data-testid="stChatInput"] button[kind="primary"] {
+    width: 42px !important;
+    height: 42px !important;
+
+    min-width: 42px !important;
+    min-height: 42px !important;
+
+    border-radius: 12px !important;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+h1 {
+    font-weight: 700;
+}
+
+p {
+    opacity: 0.8;
+}
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(128,128,128,0.4);
+    border-radius: 10px;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width:768px) {
+
+    .block-container {
+        padding-bottom: 140px !important;
+    }
+
+    [data-testid="stChatInput"] {
+        width: 95vw !important;
+        max-width: 95vw !important;
+
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+
+        bottom: 10px !important;
+    }
+}

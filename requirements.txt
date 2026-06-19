@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-dotenv
+streamlit
+requests
+pydantic
+SpeechRecognition
+pydub
+soundfile
