@@ -82,30 +82,38 @@ ai-agent-assistant/
 
 
 ## ⚙️ Installation
-
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/shakilathasneem9/minigpt-agent.git
 cd minigpt-agent
+```
 2. Create Virtual Environment (optional but recommended)
 
 Mac/Linux
 
+```
 python -m venv venv
 source venv/bin/activate
-
+```
 Windows
-
+```
 python -m venv venv
 venv\Scripts\activate
+```
 3. Install Dependencies
+```
 pip install -r requirements.txt
+```
 ▶️ Running the Project
-Start Backend (FastAPI)
-uvicorn main:app --reload
-Start Frontend (Streamlit)
-streamlit run app_ui.py
 
+Start Backend (FastAPI)
+```
+uvicorn main:app --reload
+```
+Start Frontend (Streamlit)
+```
+streamlit run app_ui.py
+```
 💡 Example Usage
 
 Input:
