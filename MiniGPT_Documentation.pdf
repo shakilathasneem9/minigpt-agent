@@ -1,0 +1,40 @@
+MiniGPT: Technical Documentation1. 
+1.Project Overview
+
+MiniGPT is a modular, tool-augmented AI agent designed for efficient task routing and response generation. 
+The system leverages a decoupled architecture to separate the user interface, backend API, core logic, and persistence layers, ensuring high maintainability and system stability. 
+
+
+ 2. System Architecture
+
+The system operates as a sequential pipeline, ensuring data integrity from user input to final output. 
+UI Layer (app_ui.py): A Streamlit-based frontend that manages user interactions and session state, communicating with the backend via HTTP POST requests.
+API Layer (main.py): A FastAPI application that serves as the gateway, providing endpoints for chat interactions and performing input validation using Pydantic models.
+Agent Logic Layer (agent.py): The central orchestration module that implements the following five-step "Safe Pipeline":  
+Intent Detection: Categorizes queries into math, search, or general domains via intent.py.
+Tool Routing: Dispatches tasks to specialized modules (calculator.py or search.py). 
+Prompt Synthesis: Aggregates the original query and tool context for the LLM layer.  
+Execution: Invokes the Grok API to generate contextually relevant responses.  
+Persistence: Updates the local chat_memory.json to maintain interaction history.  
+
+
+3. Module Specifications
+Module        Function                Implementation 
+intent.py     Intent Classification   Employs Regex for math and keyword matching for search categorization.  
+agent.py      Orchestration           Implements "Safe Wrappers" to prevent system crashes during tool execution. 
+main.py       API Services             FastAPI-based; provides health checks and the /chat endpoint.  
+memory.py     Data Persistence        Manages a JSON-based circular buffer (limit: 20 entries) for context.
+
+
+4. Technical Specifications & Safety
+
+Tech Stack: Python, FastAPI, Streamlit, Grok API, Pydantic, and JSON storage. 
+Fail-Safe Design: The agent uses robust try-except blocks around external tool calls and LLM integrations, ensuring the application remains resilient even if a specific module fails.  
+Context Control: The build_prompt function enforces system constraints to ensure the LLM delivers concise, accurate responses without exposing internal system logic.  
+
+
+5. Future Roadmap
+
+Real-time Search: Transitioning from mock-based retrieval to live search APIs.  
+Advanced Memory: Implementation of vector-based memory for improved semantic context retention.  
+Multi-Agent Reasoning: Development of a planning agent for complex, multi-step tasks.  
