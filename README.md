@@ -147,6 +147,14 @@ shakila thasneem
 AI/ML Enthusiast | Python Developer
 
 
+
 ⭐ If you like this project
 
 Give it a star ⭐ and feel free to fork it!
+<<<<<<< HEAD
+=======
+
+License
+
+This project is created for educational and portfolio purposes.
+>>>>>>> adab807 (Add MIT License)
