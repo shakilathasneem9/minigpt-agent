@@ -114,6 +114,9 @@ Start Frontend (Streamlit)
 ```
 streamlit run app_ui.py
 ```
+screenshot
+![MiniGPT Dashboard](app/assets/mini_dashboard.png)
+
 💡 Example Usage
 
 Input:

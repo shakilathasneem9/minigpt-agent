@@ -6,30 +6,31 @@ from app.agent import run_agent
 
 
 # -----------------------------
-# Logging setup
+# LOGGING
 # -----------------------------
 logging.basicConfig(level=logging.INFO)
 
 
 # -----------------------------
-# FastAPI app
+# APP
 # -----------------------------
 app = FastAPI(
     title="AI Tool-Augmented Agent",
-    description="An AI agent with intent detection and tool usage",
-    version="1.0"
+    description="AI agent with memory, tools, and intent detection",
+    version="1.1"
 )
 
 
 # -----------------------------
-# Request schema
+# REQUEST MODEL
 # -----------------------------
 class ChatRequest(BaseModel):
     query: str
+    user_id: str = "default"
 
 
 # -----------------------------
-# Health check
+# HEALTH CHECK
 # -----------------------------
 @app.get("/")
 def home():
@@ -40,26 +41,28 @@ def home():
 
 
 # -----------------------------
-# Main chat endpoint
+# CHAT ENDPOINT
 # -----------------------------
 @app.post("/chat")
 def chat(request: ChatRequest):
-    try:
-        logging.info(f"User query: {request.query}")
 
-        response = run_agent(request.query)
+    try:
+        logging.info(f"[{request.user_id}] {request.query}")
+
+        response = run_agent(request.query, request.user_id)
 
         return {
             "success": True,
+            "user_id": request.user_id,
             "query": request.query,
             "response": response
         }
 
     except Exception as e:
-        logging.error(f"Error in /chat: {str(e)}")
+        logging.error(f"Error: {str(e)}")
 
         return {
             "success": False,
             "query": request.query,
-            "response": "Sorry, something went wrong while processing your request."
+            "response": "Something went wrong."
         }

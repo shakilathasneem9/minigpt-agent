@@ -2,22 +2,12 @@ import re
 
 
 def is_math_expression(text: str) -> bool:
-    """
-    Strict math detection:
-    only allows clean arithmetic expressions
-    """
     text = text.strip()
-
-    # Pure math like: 2+2, 10 * 5, (2+3)/5
     pattern = r"^[0-9\s\+\-\*\/\(\)\.]+$"
-
     return bool(re.match(pattern, text))
 
 
 def classify_intent(query: str) -> str:
-    """
-    Rule-based intent classifier (stable + production-safe)
-    """
 
     q = query.lower().strip()
 
@@ -31,7 +21,7 @@ def classify_intent(query: str) -> str:
         return "math"
 
     # -------------------------
-    # 2. SEARCH INTENT
+    # 2. SEARCH
     # -------------------------
     search_keywords = [
         "latest",
@@ -46,6 +36,39 @@ def classify_intent(query: str) -> str:
         return "search"
 
     # -------------------------
-    # 3. GENERAL (DEFAULT)
+    # 3. MEMORY / FOLLOW-UP INTENT (NEW)
+    # -------------------------
+    memory_keywords = [
+        "what about",
+        "tell me more",
+        "more about",
+        "who is he",
+        "who is it",
+        "continue",
+        "explain more",
+        "elaborate"
+    ]
+
+    if any(word in q for word in memory_keywords):
+        return "memory"
+
+    # -------------------------
+    # 4. TOPIC DETECTION (context trigger)
+    # -------------------------
+    topic_keywords = [
+        "football",
+        "cricket",
+        "python",
+        "coding",
+        "programming",
+        "ai",
+        "machine learning"
+    ]
+
+    if any(word in q for word in topic_keywords):
+        return "general"
+
+    # -------------------------
+    # 5. DEFAULT
     # -------------------------
     return "general"

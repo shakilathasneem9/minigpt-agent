@@ -2,39 +2,40 @@ from app.intent import classify_intent
 from app.llm import call_llm
 from app.tools.search import web_search
 from app.tools.calculator import calculate
-from app.memory import add_chat
+
+# ✅ FIXED IMPORT (IMPORTANT)
+from app.memory import build_prompt, add_chat, add_memory
 
 
 # -----------------------------
-# SAFE TOOL WRAPPERS
+# TOOL WRAPPERS
 # -----------------------------
 
 def handle_search(query: str):
-    """Safe web search tool"""
     try:
-        result = web_search(query)
-        return result if result else ""
-    except:
-        return ""   # NEVER send errors to LLM
+        return web_search(query) or ""
+    except Exception as e:
+        print("Search error:", e)
+        return ""
 
 
 def handle_math(query: str):
-    """Safe math tool"""
     try:
-        result = calculate(query)
-        return result if result else ""
-    except:
-        return ""   # NEVER send errors to LLM
+        return calculate(query) or ""
+    except Exception as e:
+        print("Math error:", e)
+        return ""
 
 
 # -----------------------------
-# INTENT VALIDATION GUARD
+# INTENT HANDLING
 # -----------------------------
 
 def safe_intent(query: str):
     try:
         intent = classify_intent(query)
-    except:
+    except Exception as e:
+        print("Intent error:", e)
         intent = "general"
 
     if intent not in ["math", "search", "general"]:
@@ -58,79 +59,49 @@ def run_tool(intent: str, query: str):
 
 
 # -----------------------------
-# PROMPT BUILDER
-# -----------------------------
-
-def build_prompt(query: str, context: str):
-    system_prompt = """
-You are MiniGPT, a helpful AI assistant.
-
-Rules:
-- Give clear and correct answers
-- Be short and precise
-- If tool context is provided, use it
-- If no context, answer normally
-- Do NOT mention tools or internal system
-"""
-
-    if context:
-        user_prompt = f"""
-User Query:
-{query}
-
-Useful Context:
-{context}
-"""
-    else:
-        user_prompt = f"""
-User Query:
-{query}
-"""
-
-    return system_prompt, user_prompt
-
-
-# -----------------------------
 # MAIN AGENT PIPELINE
 # -----------------------------
 
-def run_agent(query: str) -> str:
-    """
-    Clean MiniGPT pipeline:
-    1. Intent detection
-    2. Safe tool execution
-    3. Prompt building
-    4. LLM response
-    5. Memory storage
-    """
+def run_agent(query: str, user_id: str = "default"):
 
-    # STEP 1: intent detection
-    intent = safe_intent(query)
-
-    # STEP 2: tool execution
-    context = run_tool(intent, query)
-
-    # STEP 3: build prompt
-    system_prompt, user_prompt = build_prompt(query, context)
-
-    # STEP 4: LLM call (safe)
     try:
-        response = call_llm(system_prompt, user_prompt)
-    except Exception:
-        response = "Sorry, I couldn't process your request right now."
+        # 1. intent detection
+        intent = safe_intent(query)
 
-    # STEP 5: memory save (never break app)
-    try:
+        # 2. tool execution
+        tool_context = run_tool(intent, query)
+
+        # 3. build prompt with memory
+        prompt = build_prompt(query)
+
+        # 4. attach tool result
+        if tool_context:
+            prompt += f"\n\nTool Context:\n{tool_context}"
+
+        # 5. LLM CALL (Groq)
+        response = call_llm(
+            system_prompt="You are MiniGPT, a helpful AI assistant.",
+            user_prompt=prompt
+        )
+
+        # 6. save short-term memory
         add_chat(query, response)
-    except:
-        pass
 
-    return response
+        # 7. save long-term memory (optional smart storage)
+        if any(x in query.lower() for x in ["i like", "i love", "i am", "my name"]):
+            add_memory(query)
+
+        return response
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return f"ERROR IN AGENT: {str(e)}"
 
 
 # -----------------------------
-# LOCAL TEST
+# TEST
 # -----------------------------
 
 if __name__ == "__main__":
-    print(run_agent("What is 25 * 90?"))
+    print(run_agent("I like football"))
