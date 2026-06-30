@@ -61,7 +61,7 @@ Requests 🔗
 
 
 📁 Project Structure
-
+```
 ai-agent-assistant/
 │
 ├── app/
@@ -79,7 +79,7 @@ ai-agent-assistant/
 ├── requirements.txt
 ├── chat_memory.json
 └── README.md
-
+```
 
 ## ⚙️ Installation
 ### 1. Clone the Repository
@@ -154,8 +154,9 @@ AI/ML Enthusiast | Python Developer
 ⭐ If you like this project
 
 Give it a star ⭐ and feel free to fork it!
-=======
 
-License
+## 📜 License
 
-This project is created for educational and portfolio purposes.
+This project is licensed under the MIT License.
+
+You are free to use, modify, and distribute this project with attribution.
